@@ -23,3 +23,4 @@
 • Назовите основные шаги алгоритма Дейкстры
 • Вычислительная сложность алгоритма Дейкстры. От чего она зависит?
 • Определение бинарной кучи (min-heap, max-heap). Основные операции над ней
+https://docs.google.com/document/d/1_ieDTQowQwZpcmkd9Pid5mfgidQjVxaYImVuzCjW9NQ/edit
