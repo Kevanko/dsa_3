@@ -9,15 +9,15 @@
 #include "MinHeap.h"
 
 #define MAX_VERTICES 20 // Максимальное количество вершин
-#define MAX_VERTICES_GRID 4 * 4 // Максимальное количество вершин
+#define MAX_VERTICES_GRID 100 * 100 // Максимальное количество вершин
 
 /*/-->---->--->Генерация связного графа<---<--<----/*/
 void generate_connected_graph(Graph *graph) {
-  int weight = 1;
   for (int i = 0; i < graph->nvertices - 1; i++) {
+      int weight = 1 + rand() % 100;
       graph->m[i][i+1] = graph->m[i+1][i] = weight;
   }
-  graph->m[0][graph->nvertices - 1] = graph->m[graph->nvertices - 1][0] = 1;
+  graph->m[0][graph->nvertices - 1] = graph->m[graph->nvertices - 1][0] = 1 + rand()%100;
 }
 
 /*/-->---->--->Генерация граф-решетки<---<--<----/*/
@@ -26,19 +26,34 @@ void generate_grid_graph(Graph *graph) {
   for (int i = 0; i < grid_size; i++) {
     for (int j = 0; j < grid_size; j++) {
       int vertex = i * grid_size + j;
+      int weight = 1 + rand() % 100;
       if (j + 1 < grid_size) {
-        int weight = 1;
         graph->m[vertex][vertex + 1] = weight;
         graph->m[vertex + 1][vertex] = weight;
       }
       if (i + 1 < grid_size) {
-        int weight = 1;
         graph->m[vertex][vertex + grid_size] = weight;
         graph->m[vertex + grid_size][vertex] = weight;
       }
     }
   }
 }
+void print_shortest(Graph *graph, int src){
+	int tmp = src;
+	int counter = 0;
+	int *arr = (int*)calloc(sizeof(int), graph->nvertices);
+	while(graph->prev[tmp] != -1){
+		arr[graph->nvertices - counter - 1] = graph->prev[tmp];
+		tmp = graph->prev[tmp];
+		counter += 1;
+	}
+	for(int i = 0; i < graph->nvertices; i++){
+	if (arr[i] != 0)
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
+	free(arr);
+};	
 
 void print_graph(Graph *graph) {
 for (int i = 0; i < graph->nvertices; i++) {
@@ -91,16 +106,18 @@ void get_result(struct heap *Q, Graph *graph, int src) {
   Dijekstra(Q, graph, src);
   timer = wtime() - timer;
 
-  printf("Graph | vertex: %d\n D:\t", graph->nvertices);
-  for (int i = 0; i < graph->nvertices; i++) {
+
+  printf("Graph | vertex: %d\n", graph->nvertices);
+  printf("\n time:\t %.12f\n D:\t", timer);
+  for (int i = 0; i < graph->nvertices && i < 20; i++) {
     printf("%2.1d ", graph->D[i + 1]);
   }
 
   printf("\n prev:\t");
-  for (int i = 0; i < graph->nvertices; i++) {
+  for (int i = 0; i < graph->nvertices && i < 20; i++) {
     printf("%2.1d ", graph->prev[i + 1]);
   }
-  printf("\n time:\t %.12f\n\n", timer);
+  printf("\n");
 }
 
 int main() {
@@ -138,13 +155,14 @@ int main() {
 
   /*/<---------> Print results <--------->/*/
   get_result(Q, graph_test, src);
+  print_shortest(graph_test, 5);
   get_result(Q, graph_connected, src);
   get_result(Q, graph_grid, src);
 
   /*/<---------> Print matrix <--------->/*/
   print_graph(graph_test);
   print_graph(graph_connected);
-  print_graph(graph_grid);
+  //print_graph(graph_grid);
 
   /*/<---------> Free <--------->/*/
   graph_free(graph_connected);

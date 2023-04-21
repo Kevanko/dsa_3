@@ -18,9 +18,9 @@ struct Graph *graph_create(int nvertices) {
   for (int i = 0; i < nvertices; i++) {
     graph->m[i] = (int *)calloc(nvertices, sizeof(int));
   }
-  graph->D = (int *)calloc(nvertices, sizeof(int));
-  graph->H = (int *)calloc(nvertices, sizeof(int));
-  graph->prev = (int *)calloc(nvertices, sizeof(int));
+  graph->D = (int *)calloc(nvertices + 1, sizeof(int));
+  graph->H = (int *)calloc(nvertices + 1, sizeof(int));
+  graph->prev = (int *)calloc(nvertices + 1, sizeof(int));
   return graph;
 }
 
